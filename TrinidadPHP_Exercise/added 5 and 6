@@ -1,0 +1,84 @@
+//activity 5 
+    elseif ($selected_exercise == 5) {
+        $results = '';
+        if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+            $x = (float)($_POST['x'] ?? 0);
+            $y = (float)($_POST['y'] ?? 0);
+            $method = $_POST['method'] ?? 'temp';
+
+            $before = "<p>Before swap: x = $x, y = $y</p>";
+
+            if ($method == 'temp') {
+                $temp = $x;
+                $x = $y;
+                $y = $temp;
+                $results = '<div class="results"><h3>Using Temporary Variable:</h3>' . $before . "<p>After swap: x = $x, y = $y</p></div>";
+            } elseif ($method == 'arithmetic') {
+                $x = $x + $y;
+                $y = $x - $y;
+                $x = $x - $y;
+                $results = '<div class="results"><h3>Using Arithmetic Swap:</h3>' . $before . "<p>After swap: x = $x, y = $y</p></div>";
+            } else {
+                $x = $x ^ $y;
+                $y = $x ^ $y;
+                $x = $x ^ $y;
+                $results = '<div class="results"><h3>Using XOR Bitwise Swap:</h3>' . $before . "<p>After swap: x = $x, y = $y</p></div>";
+            }
+        }
+
+        echo '<h2>5. Variable Swapper</h2>';
+        echo '<form method="POST">';
+        echo '<label>Enter value for X: <input type="number" step="0.01" name="x" value="' . ($_POST['x'] ?? '') . '" required></label>';
+        echo '<label>Enter value for Y: <input type="number" step="0.01" name="y" value="' . ($_POST['y'] ?? '') . '" required></label>';
+        echo '<label>Swap Method:
+                <select name="method" required>
+                    <option value="temp" ' . (($_POST['method'] ?? '') == 'temp' ? 'selected' : '') . '>Using Temporary Variable</option>
+                    <option value="arithmetic" ' . (($_POST['method'] ?? '') == 'arithmetic' ? 'selected' : '') . '>Using Arithmetic</option>
+                    <option value="xor" ' . (($_POST['method'] ?? '') == 'xor' ? 'selected' : '') . '>Using XOR Bitwise</option>
+                </select>
+              </label>';
+        echo '<button type="submit">Swap Values</button>';
+        echo '</form>';
+        echo $results;
+    }
+
+//activity 6
+    elseif ($selected_exercise == 6) {
+        $results = '';
+        if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+            $basic_salary = (float)($_POST['basic_salary'] ?? 0);
+            $allowance = (float)($_POST['allowance'] ?? 0);
+            $deductions = (float)($_POST['deductions'] ?? 0);
+            $tax_rate = (float)($_POST['tax_rate'] ?? 0);
+
+            if ($basic_salary <= 0) {
+                $results = '<p class="error">Please enter a valid basic salary.</p>';
+            } else {
+                $gross = $basic_salary + $allowance;
+                $tax = $gross * ($tax_rate / 100);
+                $net = $gross - $tax - $deductions;
+
+                $results = '<div class="results">
+                                <h3>Salary Breakdown:</h3>
+                                <table>
+                                    <tr><th>Basic Salary</th><td>₱' . number_format($basic_salary, 2) . '</td></tr>
+                                    <tr><th>Allowances</th><td>₱' . number_format($allowance, 2) . '</td></tr>
+                                    <tr><th>Gross Income</th><td>₱' . number_format($gross, 2) . '</td></tr>
+                                    <tr><th>Tax (' . $tax_rate . '%)</th><td>₱' . number_format($tax, 2) . '</td></tr>
+                                    <tr><th>Other Deductions</th><td>₱' . number_format($deductions, 2) . '</td></tr>
+                                    <tr><th><strong>Net Salary</strong></th><td><strong>₱' . number_format($net, 2) . '</strong></td></tr>
+                                </table>
+                            </div>';
+            }
+        }
+
+        echo '<h2>6. Salary Calculator</h2>';
+        echo '<form method="POST">';
+        echo '<label>Basic Salary (₱): <input type="number" step="0.01" name="basic_salary" value="' . ($_POST['basic_salary'] ?? '') . '" required></label>';
+        echo '<label>Allowance (₱): <input type="number" step="0.01" name="allowance" value="' . ($_POST['allowance'] ?? '') . '"></label>';
+        echo '<label>Deductions (₱): <input type="number" step="0.01" name="deductions" value="' . ($_POST['deductions'] ?? '') . '"></label>';
+        echo '<label>Tax Rate (%): <input type="number" step="0.01" name="tax_rate" value="' . ($_POST['tax_rate'] ?? '10') . '"></label>';
+        echo '<button type="submit">Compute Net Salary</button>';
+        echo '</form>';
+        echo $results;
+    }
